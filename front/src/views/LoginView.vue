@@ -19,9 +19,11 @@
           <button type="submit" class="btn" style="margin: 20px; width: 80px">
             로그인
           </button>
-          <button type="submit" class="btn" style="margin: 20px; width: 80px">
-            회원가입
-          </button>
+          <router-link to="/signUp">
+            <button type="submit" class="btn" style="margin: 20px; width: 80px">
+              회원가입
+            </button>
+          </router-link>
         </div>
       </form>
     </div>
@@ -75,6 +77,7 @@ html { width: 100%; height:100%; overflow:hidden; }
 	margin: -150px 0 0 -150px;
 	width:300px;
 	height:300px;
+  border: #000000;
 }
 .login h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
 
@@ -89,13 +92,6 @@ input {
   color: white;
 	border: 1px solid rgba(0,0,0,0.3);
 	border-radius: 4px;
-	/* box-shadow: inset 0 -5px 45px;
-	-webkit-transition: box-shadow .5s ease;
-	-moz-transition: box-shadow .5s ease;
-	-o-transition: box-shadow .5s ease;
-	-ms-transition: box-shadow .5s ease;
-	transition: box-shadow .5s ease; */
 }
-/* input:focus { box-shadow: inset 0 -5px 45px; } */
 
 </style>
