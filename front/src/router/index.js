@@ -12,7 +12,7 @@ const requireAuth = (to, from, next) => {
 }
 
 // 게임 리스트화면으로 돌아가게 하는 네비게이션 가드
-const requireLine = (to, from, next) => {
+const requireList = (to, from, next) => {
   next({ path: '/gameList' })
 }
 
@@ -25,8 +25,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
-    // beforeEnter: requireLine,
+    component: HomeView,
+    beforeEnter: requireList
   },
   {
     // 가장 처음 보이는곳, 게임방 목록이 나오는 곳
