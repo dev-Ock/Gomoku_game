@@ -26,6 +26,7 @@ export const Auth = {
     // data 는 아래 commit에서 보내주는 response 로 받아온 데이터이다.
     LOGIN(state, data) {
       // console.log('mutations 안쪽 LOGIN - data : ', data)
+
       if (!data.token) return
       // 여기 아래 user에 대한 내용을 넣어야 한다.
       state.TokenUser = data.data.user //user 갱신
@@ -33,12 +34,6 @@ export const Auth = {
       // api auth 에서 가져온 함수
       // localStorage 에는 위에서 저장하고 다음 동작에 사용될 토큰을 미리 headers 에 저장
       setAuthInHeader(data.token) //header에 token 세팅
-    },
-    PATCH(state, { email, name, phone_number }) {
-      state.TokenUser.email = email
-      state.TokenUser.name = name
-      state.TokenUser.phone_number = phone_number
-      console.log('check state value : ', state.TokenUser)
     },
     LOGOUT(state, data) {
       state.TokenUser.id = data
