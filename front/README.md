@@ -1,4 +1,4 @@
-# omokgame
+# front
 
 ## Project setup
 ```
