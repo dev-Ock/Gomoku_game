@@ -1,5 +1,7 @@
 <template>
-  <div id="app"></div>
+  <v-app id="app">
+    <router-view class="inside" />
+  </v-app>
 </template>
 
 <style>
