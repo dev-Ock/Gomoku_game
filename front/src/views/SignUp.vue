@@ -53,15 +53,15 @@ html { width: 100%; height:100%; overflow:hidden; }
 	top: 50%;
 	left: 50%;
 	margin: -150px 0 0 -150px;
-	width:500px;
-	height:700px;
+	width:300px;
+	height:300px;
   border: #000000;
   background-image: url('~@/assets/board.png');
 }
 .login h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
 
 input { 
-	width: 70%; 
+	width: 100%; 
 	margin-bottom: 10px; 
 	border: none;
 	outline: none;
