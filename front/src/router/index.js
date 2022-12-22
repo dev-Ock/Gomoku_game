@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Sample from '../views/Sample.vue'
+import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
@@ -25,16 +25,14 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home.vue'),
+    component: HomeView
     // beforeEnter: requireLine,
-    // originalPush
   },
-
   {
     // 가장 처음 보이는곳, 게임방 목록이 나오는 곳
     path: '/gameList',
     name: 'GameList',
-    component: () => import('../views/GameList.vue'),
+    component: () => import('../views/GameList.vue')
     // beforeEnter: requireAuth,
     // originalPush
   },
@@ -62,9 +60,8 @@ const routes = [
     // 회원 가입
     path: '/signUp',
     name: 'SignUp',
-    component: () => import('../components/SignUp.vue')
+    component: () => import('../views/SignUp.vue')
   },
-
   {
     // 404
     path: '/*',
