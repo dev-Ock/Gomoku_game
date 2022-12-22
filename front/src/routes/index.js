@@ -26,8 +26,8 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('../views/Home.vue'),
-    beforeEnter: requireLine,
-    originalPush
+    // beforeEnter: requireLine,
+    // originalPush
   },
 
   {
@@ -35,8 +35,8 @@ const routes = [
     path: '/gameList',
     name: 'GameList',
     component: () => import('../views/GameList.vue'),
-    beforeEnter: requireAuth,
-    originalPush
+    // beforeEnter: requireAuth,
+    // originalPush
   },
   {
     // 게임 준비단계 (게임방 안쪽, 유저2명)
