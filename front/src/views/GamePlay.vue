@@ -1,11 +1,10 @@
 <template>
   <div class="background">
-    <div class="container">
-      <div class="message">오목 OMOK</div>
-      <div class="buttons">
+    <div v-show="setGaming" class="container">
+      <!-- <div class="buttons">
         <button id="withdraw">한 번만~</button>
         <button id="reload">한 판 더 !</button>
-      </div>
+      </div> -->
       <div class="winShow1">
         검정색 승리
         <!-- <div class="trophy">
@@ -19,12 +18,34 @@
         </div> -->
       </div>
       <canvas id="oMokBoard" ref="myClass" width="600" height="600" />
+      <div class="chatRoomTest">
+        <textarea v-model="textarea" v-auto-scroll-bottom disabled />
+        <input v-model="message" class="sendMessage_input" style="color: white" />
+        <button class="sendMessage_button" @click="sendMessage()">Submit</button>
+      </div>
+      <div>
+        <button></button>
+      </div>
+    </div>
+    <div v-show="!setGaming" class="container">
+      <form class="createRoom">
+        <input v-model="roomTitle" class="createRoom_input" type="text" name="roomName" placeholder="Create room" />
+        <button class="createRoom_button" @click="createNewRoom">Create</button>
+      </form>
+      <div class="roomList">
+        <h3>방 목록</h3>
+        <div v-for="(name, index) in roomList" :key="index" class="roomList__container">
+          {{ roomList[index].name }}
+          <button class="roomEnter" @click="enterRoom">입장하기</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 // import Navbar from '@/components/Navbar.vue'
+
 export default {
   name: 'TeamInfoView',
 
@@ -37,14 +58,79 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      textarea: '',
+      message: '',
+      socketId: '',
+      setGaming: false,
+      roomList: [],
+      roomTitle: ''
+    }
   },
-  create() {},
+  created() {
+    console.log('Created data : ', this.$socket)
+    this.$socket.on('playGame', data => {
+      this.textarea += '[' + data.socketId + ']' + data.message + '\n'
+    }),
+      this.setRoomList()
+  },
   mounted() {
-    this.oMokSetUp()
+    // this.oMokSetUp()
   },
   methods: {
+    setRoomList() {
+      this.$socket.on('room_list', list => {
+        console.log('List를 받아오는 곳 : ', list)
+        this.roomList = list
+      })
+      this.$socket.emit('room_list')
+    },
+    createNewRoom(event) {
+      let savedRoomTitle = this.roomTitle
+      this.roomTitle = ''
+      event.preventDefault()
+      console.log('방만들기 : ', savedRoomTitle)
+      if (savedRoomTitle.length == 0) return
+
+      this.$socket.emit('create_room', savedRoomTitle)
+      this.enterRoom(savedRoomTitle)
+    },
+    enterRoom(savedRoomTitle) {
+      console.log('아버지가방에들어가신다 : ', savedRoomTitle)
+      this.$socket.emit('room_enter', savedRoomTitle)
+      this.setGaming = true
+      this.oMokSetUp()
+
+      this.socket.on('room_enter', () => {
+        console.log('check status', this.setGaming)
+        this.setGaming = true
+      })
+    },
+    sendMessage() {
+      this.$socket.emit('playGame', {
+        message: this.message,
+        socketId: this.$socket.id
+      })
+
+      this.textarea += '[' + this.$socket.id + ']' + this.message + '\n'
+      this.message = ''
+      this.socketId = this.$socket.id
+
+      this.$socket.on('playGame', msg => {
+        console.log('받았나?', msg)
+        this.textarea += '[' + msg.socketId + ']' + msg.message + '\n'
+      })
+    },
+    sendGameStatus(history, board, savedRoomTitle) {
+      this.$socket.emit('gameStatus', {
+        history: history,
+        board: board,
+        roomName: savedRoomTitle
+      })
+    },
     oMokSetUp() {
+      console.log('게임 상태?', this.setGaming)
+      console.log('document?', document.getElementById('oMokBoard'))
       let html = document.documentElement
       let canvas = document.getElementById('oMokBoard')
       let ctx = this.$refs.myClass.getContext('2d')
@@ -57,12 +143,10 @@ export default {
       let dolSize = 13 // 바둑돌 크기
       let count = 0
 
-      let msg = document.querySelector('.message')
-
       // reload : 한게임 더
-      let btn1 = document.querySelector('#reload')
+      // let btn1 = document.querySelector('#reload')
       // withdraw : 한번 무르기
-      let btn2 = document.querySelector('#withdraw')
+      // let btn2 = document.querySelector('#withdraw')
 
       let board = new Array(Math.pow(row + 1, 2)).fill(-1) // 144개의 배열을 생성해서 -1로 채움
       let history = new Array()
@@ -89,19 +173,19 @@ export default {
       // let audio4 = new Audio('plz.m4a')
       // let audio5 = new Audio('oneMore.m4a')
 
-      // "한번 더" 버튼
-      btn1.addEventListener('mouseup', () => {
-        // audio5.play()
-        setTimeout(() => {
-          location.reload()
-        }, 2000)
-      })
+      // // "한번 더" 버튼
+      // btn1.addEventListener('mouseup', () => {
+      //   // audio5.play()
+      //   setTimeout(() => {
+      //     location.reload()
+      //   }, 2000)
+      // })
 
-      // 무르기 버튼 누르면, 사운드 재생하고, withdraw() 함수 실행
-      btn2.addEventListener('mouseup', () => {
-        // audio4.play()
-        withdraw()
-      })
+      // // 무르기 버튼 누르면, 사운드 재생하고, withdraw() 함수 실행
+      // btn2.addEventListener('mouseup', () => {
+      //   // audio4.play()
+      //   withdraw()
+      // })
 
       draw() // 시작하면서 빈 바둑판 그리기
 
@@ -119,6 +203,7 @@ export default {
       }
 
       console.log('indexView : ', indexView)
+
       // x,y 좌표를 배열의 index값으로 변환
       let xyToIndex = (x, y) => {
         return x + y * (row + 1)
@@ -202,40 +287,45 @@ export default {
 
         let boardCopy = Object.assign([], board)
         history.push(boardCopy) //무르기를 위해서 판 전체 모양을 배열에 입력
+        console.log('현재 게임 상태 history : ', history)
+        console.log('현재 게임 상태 board : ', board)
+        console.log('현재 게임 상태 board : ', this)
+        this.sendGameStatus(history, board, this.savedRoomTitle)
       }
 
       // 물르기 함수
-      const withdraw = () => {
-        history.pop() // 무르면서 가장 최근 바둑판 모양은 날려버림
-        let lastBoard = history.slice(-1)[0] // 바둑판 마지막 모양
-        board = lastBoard
-        count-- // 흑,백 차례를 한 수 뒤로 물림
+      // const withdraw = () => {
+      //   history.pop() // 무르면서 가장 최근 바둑판 모양은 날려버림
+      //   let lastBoard = history.slice(-1)[0] // 바둑판 마지막 모양
+      //   board = lastBoard
+      //   count-- // 흑,백 차례를 한 수 뒤로 물림
 
-        draw()
+      //   draw()
 
-        // 직전 판의 모양으로 바둑판 다시 그리기
-        for (let i = 0; i < lastBoard.length; i++) {
-          let a = indexToXy(i)[0]
-          let b = indexToXy(i)[1]
+      //   // 직전 판의 모양으로 바둑판 다시 그리기
+      //   for (let i = 0; i < lastBoard.length; i++) {
+      //     let a = indexToXy(i)[0]
+      //     let b = indexToXy(i)[1]
 
-          if (lastBoard[xyToIndex(a, b)] == 1) {
-            ctx.fillStyle = 'black'
-            ctx.beginPath()
-            ctx.arc(a * rowSize + margin, b * rowSize + margin, dolSize, 0, Math.PI * 2)
-            ctx.fill()
-          }
-          if (lastBoard[xyToIndex(a, b)] == 2) {
-            ctx.fillStyle = 'white'
-            ctx.beginPath()
-            ctx.arc(a * rowSize + margin, b * rowSize + margin, dolSize, 0, Math.PI * 2)
-            ctx.fill()
-          }
-        }
-      }
+      //     if (lastBoard[xyToIndex(a, b)] == 1) {
+      //       ctx.fillStyle = 'black'
+      //       ctx.beginPath()
+      //       ctx.arc(a * rowSize + margin, b * rowSize + margin, dolSize, 0, Math.PI * 2)
+      //       ctx.fill()
+      //     }
+      //     if (lastBoard[xyToIndex(a, b)] == 2) {
+      //       ctx.fillStyle = 'white'
+      //       ctx.beginPath()
+      //       ctx.arc(a * rowSize + margin, b * rowSize + margin, dolSize, 0, Math.PI * 2)
+      //       ctx.fill()
+      //     }
+      //   }
+      // }
 
       // 승패 판정 함수
       function checkWin(x, y) {
         let thisColor = board[xyToIndex(x, y)] // 마지막 둔 돌의 색깔이 1(흑),2(백)인지...
+        console.log('마지막으로 둔 색은 ? :', thisColor)
         //가로,세로와 대각선 두 방향, 총 네 방향 체크
         for (let k = 0; k < 4; k++) {
           let winBlack = 1
@@ -251,9 +341,11 @@ export default {
                 switch (thisColor) {
                   case 1:
                     winBlack++
+                    console.log('판정 해보자 : ', checkDirection)
                     break
                   case 2:
                     winWhite++
+                    console.log('판정 해보자 : ', checkDirection)
                     break
                 }
               } else {
@@ -331,10 +423,26 @@ export default {
 .container {
   display: grid;
   /* border: 4px solid red; */
-  grid-template-columns: 200px 200px 300px;
-  grid-template-areas:
+  /* grid-template-columns: 200px 200px 300px; */
+  /* grid-template-areas:
     'message message button'
-    'canvas canvas canvas';
+    'canvas canvas canvas'; */
+}
+.createRoom {
+  color: white;
+}
+.createRoom_input {
+  color: white;
+}
+.roomList__container {
+  color: white;
+}
+.sendMessage_button {
+  color: white;
+}
+.sendMessage_input {
+  color: white;
+  border-color: white;
 }
 
 /* html {
@@ -357,8 +465,8 @@ canvas {
   grid-area: canvas;
   position: absolute;
   border: 4px solid violet;
-  margin-left: 1vw;
-  top: 5vh;
+  /* margin-left: 1vw; */
+  top: 3vh;
   z-index: 1;
 }
 
@@ -474,6 +582,15 @@ canvas {
   animation-timing-function: linear;
   animation-duration: 2s;
   animation-iteration-count: infinite;
+}
+
+textarea {
+  height: 300px;
+  color: white;
+  background-color: rgb(49, 49, 49);
+}
+.chatRoomTest {
+  margin-left: 800px;
 }
 
 @keyframes blink {
