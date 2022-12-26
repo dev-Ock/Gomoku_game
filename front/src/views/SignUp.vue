@@ -1,14 +1,9 @@
 <template>
   <div>
-    <div class="login">
-      <h1>Login</h1>
+    <div class="signup">
+      <h1>signup</h1>
       <form method="post">
-        <input
-          type="text"
-          name="u"
-          placeholder="Nickname"
-          required="required"
-        />
+        <input type="text" name="u" placeholder="UserId" required="required" />
         <input
           type="password"
           name="p"
@@ -26,12 +21,30 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Validate from '@/mixins/Validate.vue'
+
 export default {
+  mixins: [Validate],
   data() {
-    return {}
+    return {
+      UserId: '',
+      password: ''
+    }
   },
 
-  methods: {}
+  methods: {
+    ...mapActions('Auth', ['SIGNUP_AUTH']),
+    async signup(e) {
+      e.preventDefault()
+      console.log('UserId', this.UserId, 'pw', this.password)
+      // console.log('LoginView page - login - data check : ', this.employee_number, this.password)
+      this.SIGNUP_AUTH({ UserId: this.UserId, password: this.password }).then(() => {
+        // api 와 store 작업이 끝나면 아래 주로 화면 전환
+        localStorage.getItem('token') !== null ? this.$router.push('/login') : this.$router.go(0)
+      })
+    }
+  }
 }
 </script>
 
@@ -48,7 +61,7 @@ export default {
 
 html { width: 100%; height:100%; overflow:hidden; }
 
-.login { 
+.signup { 
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -56,9 +69,8 @@ html { width: 100%; height:100%; overflow:hidden; }
 	width:300px;
 	height:300px;
   border: #000000;
-  background-image: url('~@/assets/board.png');
 }
-.login h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
+.signup h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
 
 input { 
 	width: 100%; 

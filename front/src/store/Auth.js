@@ -3,12 +3,16 @@ import { setAuthInHeader } from '../api/auth'
 
 // 유저 정보 수정 필요
 const InitTokenUser = {
-  id: null,
-  employee_number: null,
-  name: null,
-  email: null,
+  UserId: null,
+  // password: null,
   authorization: null,
-  phone_number: null
+  
+  // id: null,
+  // employee_number: null,
+  // name: null,
+  // email: null,
+  // authorization: null,
+  // phone_number: null
 }
 
 export const Auth = {
@@ -27,29 +31,32 @@ export const Auth = {
     LOGIN(state, data) {
       // console.log('mutations 안쪽 LOGIN - data : ', data)
 
-      if (!data.token) return
+      if (!data) return
       // 여기 아래 user에 대한 내용을 넣어야 한다.
       state.TokenUser = data.data.user //user 갱신
-      localStorage.setItem('token', data.token) //localStorage에 token 저장
+      // localStorage.setItem('token', data.token) //localStorage에 token 저장
       // api auth 에서 가져온 함수
       // localStorage 에는 위에서 저장하고 다음 동작에 사용될 토큰을 미리 headers 에 저장
-      setAuthInHeader(data.token) //header에 token 세팅
+      // setAuthInHeader(data.token) //header에 token 세팅
     },
     LOGOUT(state, data) {
-      state.TokenUser.id = data
-      state.TokenUser.name = data
-      state.TokenUser.employee_number = data
-      state.TokenUser.email = data
+      state.TokenUser.UserId = data
       state.TokenUser.authorization = data
-      state.TokenUser.phone_number = data
+
+      // state.TokenUser.id = data
+      // state.TokenUser.name = data
+      // state.TokenUser.nickname = data
+      // state.TokenUser.email = data
+      // state.TokenUser.authorization = data
+      // state.TokenUser.phone_number = data
       // console.log('check state value : ', state)
-      localStorage.removeItem('token')
+      // localStorage.removeItem('token')
     }
   },
   actions: {
-    LOGIN_AUTH({ commit }, { employee_number, password }) {
+    LOGIN_AUTH({ commit }, { UserId, password }) {
       return auth
-        .login(employee_number, password)
+        .login(UserId, password)
         .then(data => {
           // console.log('Login 성공? data : ', data)
           data.data.message == 'invalid'
