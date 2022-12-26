@@ -12,7 +12,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    Auth: Auth,
+    Auth: Auth
     // User: User
   },
   // plugins: [createPersistedState()],

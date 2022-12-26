@@ -1,19 +1,29 @@
 <template>
   <div>
-    <div class="signup">
-      <h1>signup</h1>
-      <form method="post">
-        <input type="text" name="u" placeholder="UserId" required="required" />
+    <div class="login">
+      <h1>Login</h1>
+      <form>
+        <input
+          type="text"
+          v-model="UserId"
+          placeholder="UserId"
+          required="required"
+        />
         <input
           type="password"
-          name="p"
+          v-model="password"
           placeholder="Password"
           required="required"
         />
         <div>
-          <button type="submit" class="btn" style="margin: 20px; width: 80px">
-            완료
+          <button @click="login" class="btn" style="margin: 20px; width: 80px">
+            로그인
           </button>
+          <router-link to="/signUp">
+            <button type="submit" class="btn" style="margin: 20px; width: 80px">
+              회원가입
+            </button>
+          </router-link>
         </div>
       </form>
     </div>
@@ -32,16 +42,18 @@ export default {
       password: ''
     }
   },
-
   methods: {
-    ...mapActions('Auth', ['SIGNUP_AUTH']),
-    async signup(e) {
+    // 여기서 login 불러와서 사용하기
+    // auth.login(this.email , this.password)
+    ...mapActions('Auth', ['LOGIN_AUTH']),
+    async login(e) {
       e.preventDefault()
       console.log('UserId', this.UserId, 'pw', this.password)
-      // console.log('LoginView page - login - data check : ', this.employee_number, this.password)
-      this.SIGNUP_AUTH({ UserId: this.UserId, password: this.password }).then(() => {
+      this.LOGIN_AUTH({ UserId: this.UserId, password: this.password }).then((response) => {
         // api 와 store 작업이 끝나면 아래 주로 화면 전환
-        localStorage.getItem('token') !== null ? this.$router.push('/login') : this.$router.go(0)
+        // localStorage.getItem('token') !== null ? this.$router.push('/gameList') : this.$router.push(0)
+        console.log('response', response);
+        // this.$router.push('/gameList')
       })
     }
   }
@@ -61,7 +73,7 @@ export default {
 
 html { width: 100%; height:100%; overflow:hidden; }
 
-.signup { 
+.login { 
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -70,7 +82,7 @@ html { width: 100%; height:100%; overflow:hidden; }
 	height:300px;
   border: #000000;
 }
-.signup h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
+.login h1 { color: #000000; letter-spacing:1px; text-align:center; margin-bottom: 5%;}
 
 input { 
 	width: 100%; 
@@ -84,4 +96,5 @@ input {
 	border: 1px solid rgba(0,0,0,0.3);
 	border-radius: 4px;
 }
+
 </style>

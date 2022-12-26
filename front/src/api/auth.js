@@ -5,6 +5,10 @@ export const auth = {
   login(UserId, password) {
     // console.log('auth api page : ', employee_number, password)
     return request('post', '/auth/login', { UserId, password })
+  },
+  signup(UserId, password) {
+    // console.log('auth api page : ', employee_number, password)
+    return request('post', '/auth/signup', { UserId, password })
   }
 }
 // export const auth = {

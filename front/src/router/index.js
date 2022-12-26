@@ -54,13 +54,13 @@ const routes = [
     // 로그인
     path: '/login',
     name: 'login',
-    component: () => import('../views/LoginView.vue')
+    component: () => import('../views/auth/LoginView.vue')
   },
   {
     // 회원 가입
     path: '/signUp',
     name: 'SignUp',
-    component: () => import('../views/SignUp.vue')
+    component: () => import('../views/auth/SignUp.vue')
   },
   {
     // 404
