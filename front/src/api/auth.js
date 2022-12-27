@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const auth = {
   login(UserId, password) {
-    // console.log('auth api page : ', employee_number, password)
+    // console.log('auth api page : ', UserId, password)
     return request('post', '/auth/login', { UserId, password })
   },
   signup(UserId, password) {

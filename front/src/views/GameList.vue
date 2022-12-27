@@ -14,7 +14,21 @@ export default {
   name: 'GameList',
   components: {
     Navbar
-  }
+  },
+  computed: {
+    loginCheck() {
+      let login = false
+      if (this.$store.getters.TokenUser && this.$store.getters.TokenUser.UserId > 0) {
+        login = true
+        console.log('logincheck');
+      }
+
+      return login
+    },
+    TokenUserName() {
+      return this.$store.getters.TokenUser && this.$store.getters.TokenUser.UserId
+    }
+  },
 }
 </script>
 

@@ -49,12 +49,17 @@ export default {
     async login(e) {
       e.preventDefault()
       console.log('UserId', this.UserId, 'pw', this.password)
-      this.LOGIN_AUTH({ UserId: this.UserId, password: this.password }).then((response) => {
+      await this.LOGIN_AUTH({ UserId: this.UserId, password: this.password }).then((data) => {
         // api 와 store 작업이 끝나면 아래 주로 화면 전환
-        // localStorage.getItem('token') !== null ? this.$router.push('/gameList') : this.$router.push(0)
-        console.log('response', response);
-        // this.$router.push('/gameList')
-      })
+        if(data.data.message == "success"){
+          return this.$router.push('/gameList')
+        }
+        // this.$router.push(0)
+      }).catch(error => {
+          this.$router.go()
+          console.log('error : ', error)
+          console.log(error.response.data.message)
+        })
     }
   }
 }
