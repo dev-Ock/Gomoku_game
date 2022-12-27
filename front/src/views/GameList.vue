@@ -1,21 +1,61 @@
 <template>
-  <div>
-    <Navbar></Navbar>
-    <v-main>
-      <h1>게임 리스트가 나오는 페이지로 가장 메인이 되는 페이지 입니다.</h1>
-    </v-main>
+  <div class="page-container">
+    <md-app>
+      <md-app-toolbar class="md-primary">
+        <div class="md-toolbar-row">
+          <span class="md-title">My Chat App</span>
+        </div>
+      </md-app-toolbar>
+      <md-app-content>
+        <md-field>
+          <label>Message</label>
+          <md-textarea v-model="textarea" v-auto-scroll-bottom disabled></md-textarea>
+        </md-field>
+        <md-field>
+          <label>Your Message</label>
+          <md-input v-model="message"></md-input>
+          <md-button class="md-primary md-raised" @click="sendMessage()">Submit</md-button>
+        </md-field>
+      </md-app-content>
+    </md-app>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/NavBar.vue'
-
 export default {
-  name: 'GameList',
-  components: {
-    Navbar
+  name: 'Chat',
+  data() {
+    return {
+      textarea: '',
+      message: ''
+    }
+  },
+  created() {
+    this.$socket.on('chat', data => {
+      this.textarea += data.message + '\n'
+    })
+  },
+  methods: {
+    sendMessage() {
+      this.$socket.emit('chat', {
+        message: this.message
+      })
+
+      this.textarea += this.message + '\n'
+      this.message = ''
+    }
   }
+  
 }
 </script>
 
-<style></style>
+<style>
+.md-app {
+  height: 800px;
+  border: 1px solid rgba(#000, 0.12);
+}
+
+.md-textarea {
+  height: 300px;
+}
+</style>
