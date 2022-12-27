@@ -4,15 +4,21 @@ const logger = require('../lib/logger');
 
 const authRouter = require("./auth");
 
-// router.use("/auth", authRouter);
+const app = express()
+
+router.use("/auth", authRouter);
 
 // server test
-router.get("/",(req,res,next)=>{
-    console.log("hello")
-    logger.info(`main access success`);
-    res.status(200).json({
-        message : "success"
+app.get("/", (req, res, next) => {
+    // res.render("home");
+    console.log("브라우저 연결 완료")
+    res.statusCode(200).json({
+      message : "success"
     })
-})
+  });
+  
+app.get("/*", (req, res, next) => {
+    res.redirect("/");
+  });
 
 module.exports = router;
