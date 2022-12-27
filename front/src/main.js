@@ -1,10 +1,29 @@
-import Vue from "vue";
-import App from "./App.vue";
-import store from "./store";
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import io from 'socket.io-client'
+import Directives from '../plugins/directive'
 
-Vue.config.productionTip = false;
+let socket = io('http://192.168.0.16:3040', {
+  cors: { origin: '*' }
+})
+
+// var socket = io.connect(`채팅서버 주소`,{
+//   cors: { origin: '*' }
+// });
+
+Vue.use(Vuetify)
+Vue.use(Directives)
+
+Vue.config.productionTip = false
+Vue.prototype.$socket = socket
 
 new Vue({
+  router,
   store,
-  render: (h) => h(App),
-}).$mount("#app");
+  vuetify: new Vuetify(),
+  render: h => h(App)
+}).$mount('#app')
