@@ -7,7 +7,13 @@ import 'vuetify/dist/vuetify.min.css'
 import io from 'socket.io-client'
 import Directives from '../plugins/directive'
 
-let socket = io('http://192.168.0.16:3040')
+let socket = io('http://192.168.0.16:3040', {
+  cors: { origin: '*' }
+})
+
+// var socket = io.connect(`채팅서버 주소`,{
+//   cors: { origin: '*' }
+// });
 
 Vue.use(Vuetify)
 Vue.use(Directives)
