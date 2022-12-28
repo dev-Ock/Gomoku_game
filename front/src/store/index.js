@@ -1,19 +1,39 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import { Auth } from './Auth'
+// import { User } from './User'
+
+// import { SampleStore } from './SampleStore'
+// import { setAuthInHeader } from '../api/auth'
+// import createPersistedState from 'vuex-persistedstate'
+
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
-    // 토큰 정보도 쉽게 가져다 쓸 수 있게
-    token: localStorage.getItem('token') || null
-  },
-  getters: {},
-  mutations: {},
-  actions: {},
+const store = new Vuex.Store({
   modules: {
-    // DB
-    // Auth: Auth,
+    Auth: Auth
     // User: User
+  },
+  // plugins: [createPersistedState()],
+  state: {
+    // token: localStorage.getItem('token') || null
+  },
+  mutations: {
+    // LOGINED(state, token) {
+    //   if (!token) return
+    //   state.token = token //token 갱신
+    //   localStorage.setItem('token', token) //localstorage에 token 저장
+    //   setAuthInHeader(token) //header에 token 세팅
+    // },
+    // LOGOUTED(state, token) {
+    //   if (!token) return
+    //   localStorage.removeItem('token')
+    // }
   }
 })
+
+// const { token } = localStorage
+// store.commit('LOGINED', token)
+
+export default store
