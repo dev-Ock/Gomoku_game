@@ -3,10 +3,23 @@
     <div class="login">
       <h1>Login</h1>
       <form>
-        <input v-model="UserId" type="text" placeholder="UserId" required="required" />
-        <input v-model="password" type="password" placeholder="Password" required="required" />
+        <input
+          v-model="UserId"
+          type="text"
+          placeholder="UserId"
+          required="required"
+        />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Password"
+          required="required"
+        />
+
         <div>
-          <button class="btn" style="margin: 20px; width: 80px" @click="login">로그인</button>
+          <button class="btn" style="margin: 20px; width: 80px" @click="login">
+            로그인
+          </button>
           <router-link to="/signUp">
             <button type="submit" class="btn" style="margin: 20px; width: 80px">회원가입</button>
           </router-link>
@@ -17,40 +30,41 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import Validate from '@/mixins/Validate.vue'
+import { mapActions } from "vuex";
+import Validate from "@/mixins/Validate.vue";
 
 export default {
   mixins: [Validate],
   data() {
     return {
-      UserId: '',
-      password: ''
-    }
+      UserId: "",
+      password: "",
+    };
   },
   methods: {
     // 여기서 login 불러와서 사용하기
     // auth.login(this.email , this.password)
-    ...mapActions('Auth', ['LOGIN_AUTH']),
+    ...mapActions("Auth", ["LOGIN_AUTH"]),
     async login(e) {
-      e.preventDefault()
-      console.log('UserId', this.UserId, 'pw', this.password)
+      e.preventDefault();
+      console.log("UserId", this.UserId, "pw", this.password);
       await this.LOGIN_AUTH({ UserId: this.UserId, password: this.password })
-        .then(data => {
+        .then((data) => {
           // api 와 store 작업이 끝나면 아래 주로 화면 전환
-          if (data.data.message == 'success') {
-            return this.$router.push('/gameList')
+          if (data.data.message == "success") {
+            console.log("토큰유저확인 ", this.$store.state.Auth.TokenUser);
+            return this.$router.push("/gameList");
           }
-          // this.$router.push(0)
+          this.$router.push(0);
         })
-        .catch(error => {
-          this.$router.go()
-          console.log('error : ', error)
-          console.log(error.response.data.message)
-        })
-    }
-  }
-}
+        .catch((error) => {
+          this.$router.go();
+          console.log("error : ", error);
+          console.log(error.response.data.message);
+        });
+    },
+  },
+};
 </script>
 
 <style>
@@ -70,7 +84,13 @@ export default {
   background-color: #f5f5f5;
   background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-gradient(
+    linear,
+    0 0,
+    0 100%,
+    from(#ffffff),
+    to(#e6e6e6)
+  );
   background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: linear-gradient(top, #ffffff, #e6e6e6);
@@ -82,7 +102,8 @@ export default {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px;
   cursor: pointer;
   *margin-left: 0.3em;
@@ -109,7 +130,13 @@ export default {
   background-color: #4a77d4;
   background-image: -moz-linear-gradient(top, #6eb6de, #4a77d4);
   background-image: -ms-linear-gradient(top, #6eb6de, #4a77d4);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#6eb6de), to(#4a77d4));
+  background-image: -webkit-gradient(
+    linear,
+    0 0,
+    0 100%,
+    from(#6eb6de),
+    to(#4a77d4)
+  );
   background-image: -webkit-linear-gradient(top, #6eb6de, #4a77d4);
   background-image: -o-linear-gradient(top, #6eb6de, #4a77d4);
   background-image: linear-gradient(top, #6eb6de, #4a77d4);
@@ -117,7 +144,8 @@ export default {
   filter: progid:dximagetransform.microsoft.gradient(startColorstr=#6eb6de, endColorstr=#4a77d4, GradientType=0);
   border: 1px solid #3762bc;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.5);
 }
 .btn-primary:hover,
 .btn-primary:active,

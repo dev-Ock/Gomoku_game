@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="signup">
+    <div class="signup_box">
       <h1>signup</h1>
       <form>
         <input v-model="UserId" type="text" placeholder="UserId" required="required" />
@@ -34,11 +34,17 @@ export default {
       e.preventDefault()
       console.log('UserId', this.UserId, 'pw', this.password)
       // console.log('LoginView page - login - data check : ', this.UserId, this.password)
-      this.SIGNUP_AUTH({ UserId: this.UserId, password: this.password }).then(() => {
-        // api 와 store 작업이 끝나면 아래 주로 화면 전환
-        // localStorage.getItem('token') !== null ? this.$router.push('/login') : this.$router.go(0)
-        this.$router.push('/login')
-      })
+      this.SIGNUP_AUTH({ UserId: this.UserId, password: this.password })
+        .then(() => {
+          // api 와 store 작업이 끝나면 아래 주로 화면 전환
+          // localStorage.getItem('token') !== null ? this.$router.push('/login') : this.$router.go(0)
+          this.$router.push('/login')
+        })
+        .catch(error => {
+          this.$router.go()
+          console.log('error : ', error)
+          console.log(error.response.data.message)
+        })
     }
   }
 }
@@ -137,7 +143,7 @@ html {
   overflow: hidden;
 }
 
-.signup {
+.signup_box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -146,7 +152,7 @@ html {
   height: 300px;
   border: #000000;
 }
-.signup h1 {
+.signup_box h1 {
   color: #000000;
   letter-spacing: 1px;
   text-align: center;

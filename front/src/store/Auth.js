@@ -12,7 +12,7 @@ export const Auth = {
   namespaced: true,
 
   state: {
-    TokenUser: InitTokenUser
+    f: InitTokenUser
   },
   getters: {
     TokenUser: state => state.TokenUser

@@ -5,8 +5,8 @@
       <v-spacer></v-spacer>
     </v-app-bar>
     <template>
-      <div v-if="!loginCheck">
-        <v-container fluid style="height: 300px">
+      <!-- <div v-if="!loginCheck">
+        <v-container>
           <v-row justify="center">
             <v-menu bottom min-width="200px" rounded offset-y>
               <template #activator="{ on }">
@@ -19,74 +19,81 @@
             </v-menu>
           </v-row>
         </v-container>
-      </div>
-      <div v-if="loginCheck">
-        <v-container fluid style="height: 300px">
-          <v-row justify="center">
-            <v-menu bottom min-width="200px" rounded offset-y>
-              <template #activator="{ on }">
-                <v-btn class="d" icon x-large v-on="on">
-                  <v-avatar color="brown" size="48">
-                    <span class="white--text text-h5"> YES </span>
-                  </v-avatar>
+      </div> -->
+      <!-- <div v-if="loginCheck"> -->
+      <!-- <v-container fluid style="height: 300px"> -->
+      <v-row justify="center">
+        <v-menu bottom min-width="200px" rounded offset-y>
+          <template #activator="{ on }">
+            <v-btn class="d" icon x-large v-on="on">
+              <v-avatar color="brown" size="48">
+                <span class="white--text text-h5">
+                  {{ TokenUser.UserId }}
+                </span>
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-list-item-content class="justify-center">
+              <div class="mx-auto text-center">
+                <v-avatar color="brown">
+                  <span class="d white--text text-h5"></span>
+                </v-avatar>
+                <h3>{{ TokenUser.UserId }}</h3>
+                <v-divider class="my-3"></v-divider>
+                <v-btn depressed rounded text> 승 : {{ TokenUser.win }} </v-btn>
+                <v-divider class="my-3"></v-divider>
+                <v-btn depressed rounded text>
+                  패 : {{ TokenUser.lose }}
                 </v-btn>
-              </template>
-              <v-card>
-                <v-list-item-content class="justify-center">
-                  <div class="mx-auto text-center">
-                    <v-avatar color="brown">
-                      <span class="d white--text text-h5">user.initials</span>
-                    </v-avatar>
-                    <h3>user.fullName</h3>
-                    <p class="text-caption mt-1">user.email</p>
-                    <v-divider class="my-3"></v-divider>
-                    <v-btn depressed rounded text> Edit Account </v-btn>
-                    <v-divider class="my-3"></v-divider>
-                    <v-btn depressed rounded text> Disconnect </v-btn>
-                  </div>
-                </v-list-item-content>
-              </v-card>
-            </v-menu>
-          </v-row>
-        </v-container>
-      </div>
+              </div>
+            </v-list-item-content>
+          </v-card>
+        </v-menu>
+      </v-row>
+      <!-- </v-container> -->
+      <!-- </div> -->
     </template>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  name: 'NavBar',
+  name: "NavBar",
+  data() {
+    return {
+      loginCheck: false,
+    };
+  },
   computed: {
-    loginCheck() {
-      return this.$store.getters['TokenUser']
-    },
-    TokenUserName() {
-      return this.$store.getters.TokenUser && this.$store.getters.TokenUser.UserId
-    }
-  }
-}
+    ...mapGetters("Auth", {
+      TokenUser: "TokenUser",
+    }),
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Hahmlet&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Hahmlet&display=swap");
 
 .nav {
-  font-family: 'Hahmlet', serif;
+  font-family: "Hahmlet", serif;
   font-weight: bold;
   font-size: 25px;
 }
 
 .row {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   flex: 1 1 auto;
   margin: -67px;
 }
 .d {
   /* align-items: center; */
   margin-right: -1410px;
-  margin-top: -3px;
+  /* margin-top: -3px; */
 }
 </style>
