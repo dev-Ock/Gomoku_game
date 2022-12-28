@@ -5,7 +5,7 @@ import { setAuthInHeader } from '../api/auth'
 const InitTokenUser = {
   UserId: null,
   password: null,
-  authorization: null,
+  authorization: null
 }
 
 export const Auth = {
@@ -34,7 +34,7 @@ export const Auth = {
     LOGOUT(state, data) {
       state.TokenUser.UserId = data
       state.TokenUser.authorization = data
-    },
+    }
   },
   actions: {
     LOGIN_AUTH({ commit }, { UserId, password }) {
@@ -64,6 +64,6 @@ export const Auth = {
         .catch(error => {
           console.log('Signup 실패 : ', error)
         })
-    },
     }
   }
+}

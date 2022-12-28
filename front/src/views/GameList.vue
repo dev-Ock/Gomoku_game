@@ -14,7 +14,7 @@ export default {
   name: 'GameList',
   components: {
     Navbar
-  },
+  }
 }
 </script>
 

@@ -9,7 +9,7 @@
         <v-container fluid style="height: 300px">
           <v-row justify="center">
             <v-menu bottom min-width="200px" rounded offset-y>
-              <template v-slot:activator="{ on }">
+              <template #activator="{ on }">
                 <v-btn class="d" icon x-large v-on="on">
                   <v-avatar color="brown" size="48">
                     <span class="white--text text-h7"> NO </span>
@@ -24,7 +24,7 @@
         <v-container fluid style="height: 300px">
           <v-row justify="center">
             <v-menu bottom min-width="200px" rounded offset-y>
-              <template v-slot:activator="{ on }">
+              <template #activator="{ on }">
                 <v-btn class="d" icon x-large v-on="on">
                   <v-avatar color="brown" size="48">
                     <span class="white--text text-h5"> YES </span>
@@ -54,7 +54,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'NavBar',
@@ -65,7 +64,7 @@ export default {
     TokenUserName() {
       return this.$store.getters.TokenUser && this.$store.getters.TokenUser.UserId
     }
-  },
+  }
 }
 </script>
 
@@ -73,10 +72,10 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Hahmlet&display=swap');
 
-.nav{
-font-family: 'Hahmlet', serif;
-font-weight: bold;
-font-size: 25px;
+.nav {
+  font-family: 'Hahmlet', serif;
+  font-weight: bold;
+  font-size: 25px;
 }
 
 .row {
@@ -84,8 +83,8 @@ font-size: 25px;
   flex-wrap: wrap;
   flex: 1 1 auto;
   margin: -67px;
-  }
-.d{
+}
+.d {
   /* align-items: center; */
   margin-right: -1410px;
   margin-top: -3px;
