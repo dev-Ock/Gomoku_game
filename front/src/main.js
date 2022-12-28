@@ -7,9 +7,10 @@ import 'vuetify/dist/vuetify.min.css'
 import io from 'socket.io-client'
 import Directives from '../plugins/directive'
 
-let socket = io('http://192.168.0.16:3041', {
-  withCredentials: true
-})
+let socket = io.connect('http://192.168.0.16:3041', { cors: { origin: '*' } })
+// let socket = io('http://192.168.0.16:3041', {
+//   withCredentials: true
+// })
 
 // var socket = io.connect(`채팅서버 주소`,{
 //   cors: { origin: '*' }
