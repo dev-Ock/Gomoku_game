@@ -1,25 +1,45 @@
 <template>
   <div>
-    <Navbar></Navbar>
+    <Navbar />
     <div class="grid-box">
       <div class="video-box">
-        <a href="http://192.168.0.75:8080/" target="_blank">
-          <video class="f" autoplay muted loop height="auto">
+        <a
+          href="http://192.168.0.64:8080/"
+          target="_blank"
+        >
+          <video
+            class="f"
+            autoplay
+            muted
+            loop
+            height="auto"
+          >
             <source
               src="~@/assets/video/HomebackgroundVideo.mp4"
               type="video/mp4"
-            />
+            >
           </video>
         </a>
       </div>
       <div class="s">
-        <h1 style="margin-top: 250px">오목게임</h1>
+        <h1 style="margin-top: 250px">
+          <router-link
+            to="/gamePlay"
+            style="text-decoration: none; color:black"
+          >
+            오목게임
+          </router-link>
+        </h1>
       </div>
       <div class="t">
-        <h1 style="margin-top: 250px">Coming Soon!</h1>
+        <h1 style="margin-top: 250px">
+          Coming Soon!
+        </h1>
       </div>
     </div>
-    <h1 class="vt">슈팅게임</h1>
+    <h1 class="vt">
+      슈팅게임
+    </h1>
   </div>
 </template>
 
