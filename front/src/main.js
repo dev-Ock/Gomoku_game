@@ -7,7 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import io from 'socket.io-client'
 import Directives from '../plugins/directive'
 
-let socket = io('http://192.168.0.16:3040', {
+let socket = io('http://192.168.0.16:3041', {
   cors: { origin: '*' }
 })
 

@@ -1,21 +1,79 @@
 <template>
   <div>
     <Navbar></Navbar>
-    <v-main>
-      <h1>게임 리스트가 나오는 페이지로 가장 메인이 되는 페이지 입니다.</h1>
-    </v-main>
+    <div class="grid-box">
+      <div class="video-box">
+        <a href="http://192.168.0.75:8080/" target="_blank">
+          <video class="f" autoplay muted loop height="auto">
+            <source
+              src="~@/assets/video/HomebackgroundVideo.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </a>
+      </div>
+      <div class="s">
+        <h1 style="margin-top: 250px">오목게임</h1>
+      </div>
+      <div class="t">
+        <h1 style="margin-top: 250px">Coming Soon!</h1>
+      </div>
+    </div>
+    <h1 class="vt">슈팅게임</h1>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/NavBar.vue'
+import Navbar from "@/components/NavBar.vue";
 
 export default {
-  name: 'GameList',
+  name: "GameList",
   components: {
-    Navbar
+    Navbar,
   },
-}
+};
 </script>
 
-<style></style>
+<style>
+.grid-box {
+  margin: 200px 10px 0px 10px;
+}
+.video-box {
+  width: 90%;
+  margin: auto;
+  box-sizing: border-box;
+}
+.f {
+  border: 1px solid black;
+  float: left;
+  width: 30%;
+  box-sizing: border-box;
+  background: url("~@/assets/video/HomebackgroundVideo.mp4");
+}
+.s {
+  border: 1px solid black;
+  float: left;
+  margin-left: 4%;
+  width: 30%;
+  height: 228px;
+  box-sizing: border-box;
+  background: url("~@/assets/video/omok.gif") 100% 100% / cover no-repeat;
+}
+.t {
+  border: 1px solid black;
+  float: right;
+  width: 30%;
+  height: 228px;
+  box-sizing: border-box;
+  background: url("~@/assets/video/Coming.jpg") 48% 100% / cover no-repeat;
+}
+.text-video {
+  margin-right: 20px;
+}
+.vt {
+  position: absolute;
+  display: inline-block;
+  margin-top: 250px;
+  margin-left: -820px;
+}
+</style>

@@ -21,10 +21,10 @@ export const request = (method, url, data) => {
       return result
     })
     .catch(result => {
-      console.log("reuslt : ",result)
+      console.log('reuslt : ', result)
       const { status } = result.response
       alert(result.response.data.err)
-      console.log("status", status)
+      console.log('status', status)
       if (status === UNAUTHORIZED) return onUnauthorized()
       throw Error()
     })
