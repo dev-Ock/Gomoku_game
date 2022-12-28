@@ -32,6 +32,7 @@
 <script>
 // import Navbar from '@/components/Navbar.vue'
 // import omok from '@/views/omok'
+import io from 'socket.io-client'
 
 export default {
   name: 'TeamInfoView',
@@ -65,6 +66,9 @@ export default {
     }
   },
   created() {
+    this.socket = io.connect('http://192.168.0.16:3041', {
+      withCredentials: true
+    })
     this.rowSize = 600 / this.row
 
     this.$socket.on('playGame', data => {
