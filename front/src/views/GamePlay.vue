@@ -6,23 +6,38 @@
       <canvas id="oMokBoard" ref="myClass" width="600" height="600" />
       <div class="chatRoomTest">
         <textarea v-model="textarea" v-auto-scroll-bottom disabled />
-        <input v-model="message" placeholder=" 채팅을 입력해주세요" class="sendMessage_input" style="color: white" />
-        <button class="sendMessage_button" @click="sendMessage()">Submit</button>
+        <input v-model="message" placeholder="  채팅을 입력해주세요." class="sendMessage_input" style="color: white" />
+        <v-btn class="sendMessage_button" @click="sendMessage()">Submit</v-btn>
       </div>
       <div class="reloadButton">한번 더 ?</div>
     </div>
     <div v-show="!setGaming" class="container">
       <form class="createRoom">
         방만들기 :
-        <input v-model="roomTitle" class="createRoom_input" type="text" name="roomName" placeholder="Create room" />
+        <input v-model="roomTitle" class="createRoom_input" type="text" name="roomName" placeholder=" Create room" />
 
-        <button class="createRoom_button" @click="createNewRoom">Create</button>
+        <v-btn class="createRoom_button" @click="createNewRoom">Create</v-btn>
       </form>
       <div class="roomList">
-        <h3>방 목록</h3>
-        <div v-for="(name, index) in roomList" :key="index" class="roomList__container">
-          {{ roomList[index].name }}
-          <button class="roomEnter" @click="enterRoom(roomList[index].name)">입장하기</button>
+        <div>
+          <h1>방목록</h1>
+          <div v-for="(name, index) in roomList" :key="index">
+            <div
+              style="
+                padding-left: 10px;
+                width: 80%;
+                display: inline-block;
+                text-align: left;
+                border: 1px solid white;
+                margin: 5px;
+              "
+            >
+              방제목 : {{ name.name }}
+              <v-btn style="margin: 5px; display: inline-block; float: right" @click="enterRoom(roomList[index].name)"
+                >입장하기</v-btn
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -487,6 +502,8 @@ export default {
 }
 .roomList {
   margin-top: 20px;
+  padding-bottom: 30px;
+  padding-top: 10px;
   width: 800px;
   color: white;
   background-color: #3f3f3f;
@@ -502,13 +519,11 @@ export default {
 }
 .sendMessage_button {
   margin-left: 5px;
-  border-radius: 3em;
   color: white;
 }
 .sendMessage_input {
   color: white;
-  border-color: white;
-  border-radius: 3em;
+  /* border-color: white; */
 }
 
 canvas {
@@ -602,8 +617,8 @@ canvas {
   /* z-index: -1; */
   visibility: hidden;
   left: 30px;
-  top: 60px;
-  width: 800px;
+  top: 40px;
+  width: 850px;
   height: 660px;
   background-color: white;
   text-align: center;
@@ -623,8 +638,8 @@ canvas {
   /* z-index: -1; */
   visibility: hidden;
   left: 30px;
-  top: 60px;
-  width: 800px;
+  top: 40px;
+  width: 850px;
   height: 660px;
   background-color: black;
   text-align: center;
