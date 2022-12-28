@@ -1,15 +1,16 @@
 import http from "http";
 import express from "express";
 import SocketIO from "socket.io";
+
 // const debug = require('debug')('nodeproj:server');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const session = require("express-session");
 const dotenv = require("dotenv");
-const cors = require("cors");
+// const cors = require("cors");
 
-const { corsConfig } = require("../config/corsConfig");
+const corsConfig = require("../config/corsConfig");
 
 const logger = require("../lib/logger");
 
@@ -45,10 +46,6 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// CORS 처리
-app.use(cors(corsConfig));
-// app.use(cors());
-
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -72,7 +69,19 @@ app.use("/", indexRouter);
 const httpServer = http.createServer(app);
 
 // websocket 서버
-const wsServer = SocketIO(httpServer);
+const wsServer = SocketIO(httpServer, {
+  cors: corsConfig,
+  allowEIO3: true,
+});
+
+// const wsServer = SocketIO(httpServer, {
+//   cors: {
+//     origin: "http://192.168.0.16:8080",
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+//   allowEIO3: true,
+// });
 
 //
 let publicRoom = [];
@@ -102,11 +111,11 @@ function publicRooms() {
 }
 
 wsServer.on("connection", (socket) => {
-  // console.log("connection to browser");
+  console.log("connection to browser");
 
-  // socket.onAny((event) => {
-  //   console.log(`Socket Event : ${event}`);
-  // });
+  socket.onAny((event) => {
+    console.log(`Socket Event : ${event}`);
+  });
 
   // nickname default 설정
   socket["nickname"] = "무명";
@@ -128,12 +137,12 @@ wsServer.on("connection", (socket) => {
       return;
     }
 
-    //동일한 방이 존재할 경우
-    // if (wsServer.sockets.adapter.rooms.get(name)) {
-    //   console.log(`Room name ${name} already exists.`);
-    //   socket.emit("error", "동일한 방이 이미 존재합니다.");
-    //   return;
-    // }
+    //   //동일한 방이 존재할 경우
+    //   // if (wsServer.sockets.adapter.rooms.get(name)) {
+    //   //   console.log(`Room name ${name} already exists.`);
+    //   //   socket.emit("error", "동일한 방이 이미 존재합니다.");
+    //   //   return;
+    //   // }
 
     const roomInfo = {
       name,
@@ -199,48 +208,53 @@ wsServer.on("connection", (socket) => {
       );
   });
 
-  // 방 나가기
-  // socket.on("room_leave", () => {
-  //   const name = Array.from(socket.rooms)[1];
-  //   console.log(`Socket ${socket.id} is leaving room ${name}.`);
+  // // 방 나가기
+  // // socket.on("room_leave", () => {
+  // //   const name = Array.from(socket.rooms)[1];
+  // //   console.log(`Socket ${socket.id} is leaving room ${name}.`);
 
-  //   if (name != undefined) {
-  //     //현재 Disconnect 하는 Socket이 해당 방의 마지막 소켓일 경우 방 제거
-  //     if (wsServer.sockets.adapter.rooms.get(name).size == 1) {
-  //       console.log(`Remove room ${name}`);
-  //       publicRoom = publicRoom.filter((value) => value.name != name);
-  //       wsServer.sockets.emit("room_list", publicRoom);
-  //     } else {
-  //       const room = getPublicRoom(name);
-  //       if (room.blackPlayer === socket.id) {
-  //         room.blackPlayer = "";
-  //         emitPlayerChange(room);
-  //       } else if (room.whitePlayer === socket.id) {
-  //         room.whitePlayer = "";
-  //         emitPlayerChange(room);
-  //       }
+  // //   if (name != undefined) {
+  // //     //현재 Disconnect 하는 Socket이 해당 방의 마지막 소켓일 경우 방 제거
+  // //     if (wsServer.sockets.adapter.rooms.get(name).size == 1) {
+  // //       console.log(`Remove room ${name}`);
+  // //       publicRoom = publicRoom.filter((value) => value.name != name);
+  // //       wsServer.sockets.emit("room_list", publicRoom);
+  // //     } else {
+  // //       const room = getPublicRoom(name);
+  // //       if (room.blackPlayer === socket.id) {
+  // //         room.blackPlayer = "";
+  // //         emitPlayerChange(room);
+  // //       } else if (room.whitePlayer === socket.id) {
+  // //         room.whitePlayer = "";
+  // //         emitPlayerChange(room);
+  // //       }
 
-  //       wsServer.to(name).emit("message", `${socket.id} 님이 퇴장하셨습니다.`);
-  //     }
-  //     socket.leave(name);
-  //   }
+  // //       wsServer.to(name).emit("message", `${socket.id} 님이 퇴장하셨습니다.`);
+  // //     }
+  // //     socket.leave(name);
+  // //   }
 
-  //   socket.emit("room_leave");
+  // //   socket.emit("room_leave");
+  // // });
+
+  // // 참가자가 방을 나가는 중  // the Set contains at least the socket ID
+  // // Fired when the client is going to be disconnected (but hasn't left its rooms yet).
+  // socket.on("disconnecting", () => {
+  //   // console.log("###socket.room### : ", socket);
+  //   socket.rooms.forEach((room) =>
+  //     socket.to(room).emit("bye", socket.nickname, countRoom(room) - 1)
+  //   );
   // });
 
-  // 참가자가 방을 나가는 중  // the Set contains at least the socket ID
-  // Fired when the client is going to be disconnected (but hasn't left its rooms yet).
-  socket.on("disconnecting", () => {
-    // console.log("###socket.room### : ", socket);
-    socket.rooms.forEach((room) =>
-      socket.to(room).emit("bye", socket.nickname, countRoom(room) - 1)
-    );
-  });
+  // // 참가자가 방을 나갈 때
+  // socket.on("disconnect", () => {
+  //   // console.log("###sock.room### : ", socket);
+  //   wsServer.sockets.emit("room_change", publicRooms());
+  // });
 
-  // 참가자가 방을 나갈 때
-  socket.on("disconnect", () => {
-    // console.log("###sock.room### : ", socket);
-    wsServer.sockets.emit("room_change", publicRooms());
+  // error 처리
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
   });
 
   // socket.on("enter_room", (roomName, done) => {

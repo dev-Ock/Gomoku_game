@@ -6,7 +6,7 @@
       <canvas id="oMokBoard" ref="myClass" width="600" height="600" />
       <div class="chatRoomTest">
         <textarea v-model="textarea" v-auto-scroll-bottom disabled />
-        <input v-model="message" class="sendMessage_input" style="color: white" />
+        <input v-model="message" placeholder=" 채팅을 입력해주세요" class="sendMessage_input" style="color: white" />
         <button class="sendMessage_button" @click="sendMessage()">Submit</button>
       </div>
       <div class="reloadButton">한번 더 ?</div>
@@ -32,6 +32,7 @@
 <script>
 // import Navbar from '@/components/Navbar.vue'
 // import omok from '@/views/omok'
+import io from 'socket.io-client'
 
 export default {
   name: 'TeamInfoView',
@@ -65,6 +66,9 @@ export default {
     }
   },
   created() {
+    this.socket = io.connect('http://192.168.0.16:3041', {
+      withCredentials: true
+    })
     this.rowSize = 600 / this.row
 
     this.$socket.on('playGame', data => {
@@ -497,6 +501,7 @@ export default {
   border-radius: 3em;
 }
 .sendMessage_button {
+  margin-left: 5px;
   border-radius: 3em;
   color: white;
 }
@@ -648,6 +653,7 @@ input {
 }
 .chatRoomTest {
   margin-left: 800px;
+  margin-top: 10px;
 }
 .reloadButton {
   margin-left: 800px;

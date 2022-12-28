@@ -21,9 +21,7 @@
             로그인
           </button>
           <router-link to="/signUp">
-            <button type="submit" class="btn" style="margin: 20px; width: 80px">
-              회원가입
-            </button>
+            <button type="submit" class="btn" style="margin: 20px; width: 80px">회원가입</button>
           </router-link>
         </div>
       </form>
@@ -57,7 +55,6 @@ export default {
             console.log("토큰유저확인 ", this.$store.state.Auth.TokenUser);
             return this.$router.push("/gameList");
           }
-
           this.$router.push(0);
         })
         .catch((error) => {
